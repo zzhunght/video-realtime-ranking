@@ -1,0 +1,10 @@
+
+Port: 8080
+Database:
+  DNS: "postgres://postgres:admin123@localhost:5432/realtimeranking?sslmode=disable"
+  MaxOpenConns: 10
+  MaxIdleConns: 10
+  MaxIdleTime: "15m"
+
+Redis:
+ Port: 6379
