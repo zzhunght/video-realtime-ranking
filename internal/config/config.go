@@ -13,7 +13,10 @@ type Config struct {
 		MaxIdleTime  string `mapstructure:"MaxIdleTime"`
 	} `mapstructure:"Database"`
 	Redis struct {
-		Port int `mapstructure:"port"`
+		Port     int    `mapstructure:"Port"`
+		Host     string `mapstructure:"Host"`
+		DB       int    `mapstructure:"DB"`
+		Password string `mapstructure:"Password"`
 	} `mapstructure:"Redis"`
 }
 

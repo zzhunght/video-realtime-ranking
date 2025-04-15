@@ -7,6 +7,11 @@ import (
 	"github.com/go-redis/redis/v8"
 )
 
+var (
+	VideoLeaderBoardKey = "video:leaderboard"
+	VideoDataKeyPrefix  = "video:leaderboard:data"
+)
+
 type RedisClient struct {
 	Client *redis.Client
 }

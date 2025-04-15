@@ -7,6 +7,6 @@ import (
 )
 
 type RankingRepository interface {
-	AddScore(ctx context.Context, event *models.Event) error
-	GetRanking(ctx context.Context) error
+	AddVideoScore(ctx context.Context, member string, score float64) error
+	GetVideoRanking(ctx context.Context, limit int, reverse bool) ([]models.Score, error)
 }

@@ -1,4 +1,4 @@
-package handler
+package response
 
 import (
 	"encoding/json"
@@ -11,7 +11,7 @@ type Response struct {
 	Data    interface{} `json:"data,omitempty"`
 }
 
-func successResponse(w http.ResponseWriter, status int, data interface{}, headers http.Header) error {
+func SuccessResponse(w http.ResponseWriter, data interface{}, status int, headers http.Header) error {
 	js, err := json.Marshal(data)
 	if err != nil {
 		return err
@@ -27,7 +27,7 @@ func successResponse(w http.ResponseWriter, status int, data interface{}, header
 	return nil
 }
 
-func errorResponse(w http.ResponseWriter, err error, status int) {
+func ErrorResponse(w http.ResponseWriter, err error, status int) {
 	data := &Response{
 		Message: err.Error(),
 		Status:  status,

@@ -4,20 +4,21 @@ import (
 	"context"
 	"database/sql"
 
+	_ "github.com/lib/pq"
 	"github.com/zzhunght/realtime-video-ranking/internal/domain/models"
 	"github.com/zzhunght/realtime-video-ranking/internal/domain/repositories"
 	errors "github.com/zzhunght/realtime-video-ranking/pkg"
 )
 
-type VideoRepositoryImpl struct {
+type PostgresVideoRepository struct {
 	db *sql.DB
 }
 
-func NewVideoRepository(db *sql.DB) *VideoRepositoryImpl {
-	return &VideoRepositoryImpl{db: db}
+func NewVideoRepository(db *sql.DB) *PostgresVideoRepository {
+	return &PostgresVideoRepository{db: db}
 }
 
-func (v *VideoRepositoryImpl) GetByID(ctx context.Context, id string) (*models.Video, error) {
+func (v *PostgresVideoRepository) GetByID(ctx context.Context, id string) (*models.Video, error) {
 	var video models.Video
 
 	row, err := v.db.QueryContext(ctx,
@@ -42,15 +43,7 @@ func (v *VideoRepositoryImpl) GetByID(ctx context.Context, id string) (*models.V
 	return &video, nil
 }
 
-func (v *VideoRepositoryImpl) GetByCreatorID(ctx context.Context, creatorID string) ([]*models.Video, error) {
-	return nil, nil
-}
-
-func (v *VideoRepositoryImpl) GetByChannelID(ctx context.Context, channelID string) ([]*models.Video, error) {
-	return nil, nil
-}
-
-func (v *VideoRepositoryImpl) Create(ctx context.Context, video *models.Video) error {
+func (v *PostgresVideoRepository) Create(ctx context.Context, video *models.Video) error {
 
 	query := `
 	INSERT INTO videos (title, desc, category_id, creator_id)
@@ -75,4 +68,4 @@ func (v *VideoRepositoryImpl) Create(ctx context.Context, video *models.Video) e
 }
 
 // kiểm tra impl có đủ method của interface hay k
-var _ repositories.VideoRepository = (*VideoRepositoryImpl)(nil)
+var _ repositories.VideoRepository = (*PostgresVideoRepository)(nil)
