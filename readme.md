@@ -4,9 +4,9 @@
 ![alt text](image.png)
 
 
-- Dùng Redis (ZSet) để lưu ranking, (HSET) để lưu metadata
+- Dùng Redis (ZSet) để lưu ranking, (HSET) để lưu metadata (low latency)
 - Postgres làm db chính nơi lưu trữ metadata của video
-- Kafka làm Message Queue để xử lí event theo bất đồng bộ
+- Kafka làm Message Queue để xử lí event theo bất đồng bộ (dễ dàng scale khi có lượng lớn user)
 - Sử dụng EDA + DDD parttern
 
 
@@ -21,6 +21,12 @@ project-name/
 │   ├── application/                # Application layer
 │   |   |── video_service.go        # Xử lí bussiness logic
 │   |   └── ranking_service.go
+|   |
+|   ├── docs/                      #API doc
+│   |   ├── api     
+│   │   │   ├── docs.go             
+│   │   │   ├── swagger.json             
+│   │   │   ├── swagger.yaml        
 |   |
 |   ├── config/
 │   |   ├── config.go                   # Config
@@ -66,13 +72,7 @@ project-name/
 │       └── errors.go
 │
 ├── scripts/              
-│   ├── seed.go  #Mock scripts tự động call api add event
-│
-├── docs/                          
-│   ├── api/
-│   │   └── swagger.yaml
-│   └── architecture/
-│       └── ddd.md
+│   ├── mock.go  #Mock scripts tự động call api add event
 │
 ├── config.yaml                    # Env
 ├── go.mod
@@ -83,10 +83,20 @@ project-name/
 └── readme.md
 ```
 
-
+### Note
+> Bài test này em chỉ tập trung vào realtime ranking nên những thứ sau đây em bỏ qua:
+- Authentication Middleware
+- Lưu event ( comment, share, view, react) vào database postgres
+- Không đủ thời gian viết unit tests
+- API chỉ có top rank video global không có per user
 
 ### Cách chạy ứng dụng
 Sử dụng docker compose
 ```
 docker compose up
 ```
+
+Khi chạy docker xong sẽ tự động chạy 1 mock scripts mô phỏng lại user tương tác với video
+và cập nhật score liên tục
+
+[Truy cập vào và test API tại đây](http://localhost:8080/swagger/index.html)

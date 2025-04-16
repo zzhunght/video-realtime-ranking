@@ -24,6 +24,17 @@ func NewRankingHanlder(rankingService *services.RankingService, producer *mq.Kaf
 	}
 }
 
+// GetVideoByRank godoc
+// @Summary Get videos by rank
+// @Description Fetch videos ranked by score
+// @Tags ranking
+// @Accept  json
+// @Produce  json
+// @Param limit query int false "Limit number of videos (default: 10)"
+// @Param order query string false "Sort order: ASC or DESC (default: DESC)"
+// @Success 200 {object} response.Response{Data=object}
+// @Failure 500 {object} response.Response{Message=string}
+// @Router /api/v1/ranking/videos [get]
 func (h *RankingHanlder) GetVideoByRank(w http.ResponseWriter, r *http.Request) {
 
 	limit := readInt(r.URL.Query(), "limit", 10)
@@ -48,6 +59,19 @@ func (h *RankingHanlder) GetVideoByRank(w http.ResponseWriter, r *http.Request) 
 
 }
 
+// CreateEvent godoc
+// @Summary Create a new ranking event
+// @Description Create a new ranking event by submitting a score for a video
+// @Tags ranking
+// @Accept  json
+// @Produce  json
+// @Param id path string true "Video ID"
+// @Param payload body dto.AddScore true "Payload with score details"
+// @Success 200 {object} response.Response{Data=map[string]string}
+// @Failure 400 {object} response.Response{Message=string}
+// @Failure 404 {object} response.Response{Message=string}
+// @Failure 500 {object} response.Response{Message=string}
+// @Router /api/v1/ranking/event/{id} [post]
 func (h *RankingHanlder) CreateEvent(w http.ResponseWriter, r *http.Request) {
 
 	id, err := readIDParam(r)

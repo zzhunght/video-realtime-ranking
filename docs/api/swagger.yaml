@@ -1,0 +1,122 @@
+definitions:
+  dto.AddScore:
+    properties:
+      payload:
+        additionalProperties: true
+        type: object
+      type:
+        type: string
+      user_id:
+        type: string
+      video_id:
+        type: string
+    type: object
+  response.Response:
+    properties:
+      data: {}
+      message:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /api/v1/ranking/event/{id}:
+    post:
+      consumes:
+      - application/json
+      description: Create a new ranking event by submitting a score for a video
+      parameters:
+      - description: Video ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Payload with score details
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/dto.AddScore'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                Data:
+                  additionalProperties:
+                    type: string
+                  type: object
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                Message:
+                  type: string
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                Message:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                Message:
+                  type: string
+              type: object
+      summary: Create a new ranking event
+      tags:
+      - ranking
+  /api/v1/ranking/videos:
+    get:
+      consumes:
+      - application/json
+      description: Fetch videos ranked by score
+      parameters:
+      - description: 'Limit number of videos (default: 10)'
+        in: query
+        name: limit
+        type: integer
+      - description: 'Sort order: ASC or DESC (default: DESC)'
+        in: query
+        name: order
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                Data:
+                  type: object
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                Message:
+                  type: string
+              type: object
+      summary: Get videos by rank
+      tags:
+      - ranking
+swagger: "2.0"
