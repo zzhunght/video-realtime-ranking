@@ -25,11 +25,12 @@ func (r *RedisRankingRepository) AddVideoScore(ctx context.Context, member strin
 func (r *RedisRankingRepository) GetVideoRanking(ctx context.Context, limit int, reverse bool) ([]models.Score, error) {
 	var videos []redis.Z
 	var err error
+
 	if reverse {
-		videos, err = r.client.ZRevRangeWithScores(ctx, VideoLeaderBoardKey, 0, int64(limit)).Result()
+		videos, err = r.client.ZRevRangeWithScores(ctx, VideoLeaderBoardKey, 0, int64(limit-1)).Result()
 
 	} else {
-		videos, err = r.client.ZRangeWithScores(ctx, VideoLeaderBoardKey, 0, int64(limit)).Result()
+		videos, err = r.client.ZRangeWithScores(ctx, VideoLeaderBoardKey, 0, int64(limit-1)).Result()
 	}
 
 	if err != nil {

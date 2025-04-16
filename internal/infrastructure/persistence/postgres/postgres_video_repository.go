@@ -21,9 +21,14 @@ func NewVideoRepository(db *sql.DB) *PostgresVideoRepository {
 func (v *PostgresVideoRepository) GetByID(ctx context.Context, id string) (*models.Video, error) {
 	var video models.Video
 
-	row, err := v.db.QueryContext(ctx,
-		"SELECT id, title, desc, category_id from video where id = $1;",
+	err := v.db.QueryRowContext(ctx,
+		`SELECT id, title, "desc", category_id from video where id = $1;`,
 		id,
+	).Scan(
+		&video.ID,
+		&video.Title,
+		&video.Desc,
+		&video.CategoryID,
 	)
 
 	if err != nil {
@@ -33,14 +38,8 @@ func (v *PostgresVideoRepository) GetByID(ctx context.Context, id string) (*mode
 
 		return nil, err
 	}
-	row.Scan(
-		&video.ID,
-		&video.Title,
-		&video.Desc,
-		&video.CategoryID,
-	)
 
-	return &video, nil
+	return &video, err
 }
 
 func (v *PostgresVideoRepository) Create(ctx context.Context, video *models.Video) error {

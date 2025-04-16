@@ -15,6 +15,7 @@ func NewKafkaProducer(brokers []string, topic string) *KafkaProducer {
 		Brokers:     brokers,
 		Topic:       topic,
 		MaxAttempts: 10,
+		Async:       true,
 	})
 
 	return &KafkaProducer{

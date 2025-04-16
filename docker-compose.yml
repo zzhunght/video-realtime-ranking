@@ -11,7 +11,7 @@ services:
     ports:
       - "5435:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - ./migrations:/docker-entrypoint-initdb.d
     networks:
       - app_network
     healthcheck:
@@ -49,6 +49,8 @@ services:
       timeout: 5s
       retries: 5
       start_period: 5s
+    networks:
+      - app_network
 
   kafka:
     image: confluentinc/cp-kafka:7.6.0
@@ -58,7 +60,7 @@ services:
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     depends_on:
@@ -70,30 +72,43 @@ services:
       timeout: 10s
       retries: 5
       start_period: 15s
+    networks:
+      - app_network
 
-  # app:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   container_name: app_backend
-  #   environment:
-  #     - DB_HOST=postgres
-  #     - DB_USER=${POSTGRES_USER:-postgres}
-  #     - DB_PASSWORD=${POSTGRES_PASSWORD:-postgres}
-  #     - DB_NAME=${POSTGRES_DB:-appdb}
-  #     - DB_PORT=5432
-  #     - REDIS_HOST=redis
-  #     - REDIS_PORT=6379
-  #     - REDIS_PASSWORD=${REDIS_PASSWORD:-redis}
-  #   ports:
-  #     - "8080:8080"
-  #   depends_on:
-  #     postgres:
-  #       condition: service_healthy
-  #     redis:
-  #       condition: service_healthy
-  #   networks:
-  #     - app_network
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: app_backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    networks:
+      - app_network
+  
+  mock:
+    build:
+      context: .
+      dockerfile: Dockerfile.mock
+    container_name: mock_scripts
+    depends_on:
+      app:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    networks:
+      - app_network
+
 
 networks:
   app_network:
@@ -102,3 +117,5 @@ networks:
 volumes:
   postgres_data:
   redis_data:
+  kafka:
+  

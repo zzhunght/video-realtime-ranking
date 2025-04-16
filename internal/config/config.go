@@ -18,6 +18,11 @@ type Config struct {
 		DB       int    `mapstructure:"DB"`
 		Password string `mapstructure:"Password"`
 	} `mapstructure:"Redis"`
+	Kafka struct {
+		Brokers    []string `mapstructure:"Brokers"`
+		Topic      string   `mapstructure:"Topic"`
+		TopicGroup string   `mapstructure:"TopicGroup"`
+	} `mapstructure:"Kafka"`
 }
 
 func LoadConfig() (*Config, error) {

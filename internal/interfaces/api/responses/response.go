@@ -6,7 +6,6 @@ import (
 )
 
 type Response struct {
-	Status  int         `json:"status"`
 	Message string      `json:"message,omitempty"`
 	Data    interface{} `json:"data,omitempty"`
 }
@@ -30,7 +29,6 @@ func SuccessResponse(w http.ResponseWriter, data interface{}, status int, header
 func ErrorResponse(w http.ResponseWriter, err error, status int) {
 	data := &Response{
 		Message: err.Error(),
-		Status:  status,
 	}
 	js, err := json.Marshal(&data)
 

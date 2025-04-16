@@ -1,13 +1,39 @@
 
+# Port: 8080
+# Database:
+#   DNS: "postgres://postgres:admin123@localhost:5435/realtimeranking?sslmode=disable"
+#   MaxOpenConns: 10
+#   MaxIdleConns: 10
+#   MaxIdleTime: "15m"
+
+# Redis:
+#  Port: 6379
+#  Host: "127.0.0.1"
+#  DB: 0
+#  Password: ""
+
+
+# Kafka:
+#   Brokers: ["localhost:9092"]
+#   Topic: "VideoRanking"
+#   TopicGroup: "AddScore"
+
+
+
 Port: 8080
 Database:
-  DNS: "postgres://postgres:admin123@localhost:5435/appdb?sslmode=disable"
+  DNS: "postgres://postgres:admin123@postgres:5432/realtimeranking?sslmode=disable"
   MaxOpenConns: 10
   MaxIdleConns: 10
   MaxIdleTime: "15m"
 
 Redis:
- Port: 6379
- Host: "127.0.0.1"
- DB: 0
- Password: ""
+  Port: 6379
+  Host: "redis"
+  DB: 0
+  Password: ""
+
+Kafka:
+  Brokers: ["kafka:9092"]
+  Topic: "VideoRanking"
+  TopicGroup: "AddScore"

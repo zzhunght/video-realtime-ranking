@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	services "github.com/zzhunght/realtime-video-ranking/internal/application"
-	mq "github.com/zzhunght/realtime-video-ranking/internal/infrastructure/mesaging"
+	mq "github.com/zzhunght/realtime-video-ranking/internal/infrastructure/messaging"
 	"github.com/zzhunght/realtime-video-ranking/internal/interfaces/api/dto"
 	response "github.com/zzhunght/realtime-video-ranking/internal/interfaces/api/responses"
 	errors "github.com/zzhunght/realtime-video-ranking/pkg"
@@ -25,6 +25,26 @@ func NewRankingHanlder(rankingService *services.RankingService, producer *mq.Kaf
 }
 
 func (h *RankingHanlder) GetVideoByRank(w http.ResponseWriter, r *http.Request) {
+
+	limit := readInt(r.URL.Query(), "limit", 10)
+	orderby := readString(r.URL.Query(), "order", "DESC")
+
+	reverse := true
+
+	if orderby == "ASC" {
+		reverse = false
+	}
+	data, err := h.rankingService.GetVideoByRank(r.Context(), limit, reverse)
+
+	if err != nil {
+		log.Printf("error when get rank video: %v \n", err)
+		response.ErrorResponse(w, errors.ErrInternalServer, http.StatusInternalServerError)
+		return
+	}
+
+	response.SuccessResponse(w, response.Response{
+		Data: data,
+	}, http.StatusOK, nil)
 
 }
 
@@ -51,7 +71,19 @@ func (h *RankingHanlder) CreateEvent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if err := payload.Validate(); err != nil {
+		log.Printf("Validate fail: %v \n", err)
+		response.ErrorResponse(w, errors.ErrBadrequest, http.StatusBadRequest)
+		return
+	}
+
 	msg, err := json.Marshal(payload)
+	if err != nil {
+		log.Printf("Err when encode data: %v \n", err)
+		response.ErrorResponse(w, errors.ErrInternalServer, http.StatusInternalServerError)
+		return
+	}
+
 	err = h.producer.SendMessage(r.Context(), msg)
 
 	if err != nil {
@@ -62,7 +94,7 @@ func (h *RankingHanlder) CreateEvent(w http.ResponseWriter, r *http.Request) {
 
 	response.SuccessResponse(w, response.Response{
 		Data: map[string]string{
-			"message": "send event to kafka success",
+			"message": "create event success",
 		},
 	}, http.StatusOK, nil)
 	return

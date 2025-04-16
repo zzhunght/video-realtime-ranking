@@ -62,12 +62,12 @@ INSERT INTO "category" ("name") VALUES
   ('Thể thao'),
   ('Giải trí');
 
-INSERT INTO "video" ("title", "desc", "category_id", "creator_id") VALUES
-  ('Video 1', 'Mô tả video 1', 1, '057e6539-733b-47f9-a034-b72a2c00c291'),
-  ('Video 2', 'Mô tả video 2', 1, '057e6539-733b-47f9-a034-b72a2c00c291'),
-  ('Video 3', 'Mô tả video 3', 1, '057e6539-733b-47f9-a034-b72a2c00c291'),
-  ('Video 4', 'Mô tả video 4', 2, '057e6539-733b-47f9-a034-b72a2c00c291'),
-  ('Video 5', 'Mô tả video 5', 2, '057e6539-733b-47f9-a034-b72a2c00c291'),
-  ('Video 6', 'Mô tả video 6', 2, '057e6539-733b-47f9-a034-b72a2c00c291');
+INSERT INTO "video" ("id", "title", "desc", "category_id", "creator_id") VALUES
+  ('7108d562-2f5c-47f5-9a02-56da5e5438f8', 'Video 1', 'Mô tả video 1', 1, '057e6539-733b-47f9-a034-b72a2c00c291'),
+  ('9e1861e2-1b00-4973-848f-622fe905b842', 'Video 2', 'Mô tả video 2', 1, '057e6539-733b-47f9-a034-b72a2c00c291'),
+  ('b588a489-5a2d-4fc6-a142-138728c1989b','Video 3', 'Mô tả video 3', 1, '057e6539-733b-47f9-a034-b72a2c00c291'),
+  ('bec1b03d-f737-42f8-8f8d-360798ea1a2e', 'Video 4', 'Mô tả video 4', 2, '057e6539-733b-47f9-a034-b72a2c00c291'),
+  ('c5068cbf-76c8-4a09-8b7b-13ff5b58d679', 'Video 5', 'Mô tả video 5', 2, '057e6539-733b-47f9-a034-b72a2c00c291'),
+  ('18ccfa6a-387f-4900-8fbd-0462678c00ec', 'Video 6', 'Mô tả video 6', 2, '057e6539-733b-47f9-a034-b72a2c00c291');
 
 
