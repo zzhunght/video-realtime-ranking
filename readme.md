@@ -1,5 +1,8 @@
 # Realtime Video Ranking
 
+### Description
+- Hệ thống xếp hạng video realtime theo tương tác của người dùng
+
 ### High Level Design
 ![alt text](image.png)
 
@@ -7,7 +10,7 @@
 - Dùng Redis (ZSet) để lưu ranking, (HSET) để lưu metadata (low latency)
 - Postgres làm db chính nơi lưu trữ metadata của video
 - Kafka làm Message Queue để xử lí event theo bất đồng bộ (dễ dàng scale khi có lượng lớn user)
-- Sử dụng EDA + DDD parttern
+- Sử dụng EDA parttern
 
 
 ### Code Struct
@@ -83,12 +86,6 @@ project-name/
 └── readme.md
 ```
 
-### Note
-> Bài test này em chỉ tập trung vào realtime ranking nên những thứ sau đây em bỏ qua:
-- Authentication Middleware
-- Lưu event ( comment, share, view, react) vào database postgres
-- Không đủ thời gian viết unit tests
-- API chỉ có top rank video global không có per user
 
 ### Cách chạy ứng dụng
 Sử dụng docker compose
