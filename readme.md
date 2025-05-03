@@ -1,7 +1,7 @@
 # Realtime Video Ranking
 
 ### Description
-- Hệ thống xếp hạng video realtime theo tương tác của người dùng
+- Hệ thống mô phỏng xếp hạng video realtime theo tương tác của người dùng
 
 ### High Level Design
 ![alt text](image.png)
@@ -12,6 +12,7 @@
 - Kafka làm Message Queue để xử lí event theo bất đồng bộ (dễ dàng scale khi có lượng lớn user)
 - Sử dụng EDA parttern
 
+### Note
 
 ### Code Struct
 
